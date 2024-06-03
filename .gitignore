@@ -1,0 +1,11 @@
+
+# Dependency directories
+node_modules/
+# dotenv environment variables file
+.env
+
+# Ignore everything in the old directory
+old/
+
+src/data/stats.json
+src/data/users.json

@@ -1,0 +1,119 @@
+{
+  "models": [
+    {
+      "name": "לוליטה",
+      "gender": "female",
+      "aboutMe": "בת 30 💥 אישה מלידה מינית וחושנית💦 לוליטה מציעה שיחות וידאו מחרמנות במיוחד שלא ישאירו לך סיכוי לצאת לא מסופק 🔥💋",
+      "mainService": {
+        "description": "שיחת וידאו",
+        "duration": "10 דקות",
+        "price": "250 ₪"
+      },
+      "moreServices": [
+        {
+          "description": "שיחת וידאו",
+          "duration": "20 דקות",
+          "price": "400 ₪"
+        },
+        {
+          "description": "סקסטינג & סרטונים אישיים",
+          "duration": "10 דקות + 2 סרטונים אישיים",
+          "price": "200 ₪"
+        }
+      ],
+      "age": 30,
+      "isAvailable": true,
+      "id": 1
+    },
+    {
+      "name": "עדן בייבי",
+      "gender": "female",
+      "aboutMe": "דוגמנית של ממש בת 20 💥 שופעת חושניות ומיניות בלתי ניתנת לעצירה 💋 שיחת וידאו איתה תרוקן אותך עד הטיפה האחרונה 💦",
+      "mainService": {
+        "description": "שיחת וידאו",
+        "duration": "10 דקות",
+        "price": "400 ₪"
+      },
+      "moreServices": [
+        {
+          "description": "שיחת וידאו",
+          "duration": "20 דקות",
+          "price": "700 ₪"
+        },
+        {
+          "description": "סקסטינג & סרטונים אישיים",
+          "duration": "10 דקות + 2 סרטונים אישיים",
+          "price": "300 ₪"
+        },
+        {
+          "description": "מכירת פריטים אישיים",
+          "items": [
+            {
+              "type": "גרביים",
+              "price": "150 ₪",
+              "shippingIncluded": true
+            },
+            {
+              "type": "תחתונים",
+              "price": "150 ₪",
+              "shippingIncluded": true
+            },
+            {
+              "type": "חזייה",
+              "price": "150 ₪",
+              "shippingIncluded": true
+            }
+          ]
+        }
+      ],
+      "age": 20,
+      "isAvailable": true,
+      "id": 2
+    },
+    {
+      "name": "יסמין",
+      "gender": "female",
+      "aboutMe": "בת 25, פצצת מין בלונדינית עם כוס מושלם 🔥 אזהרה 🔞 יש סיכוי לנזק ל 🍆 ואף לתקרה דביקה 💦 PassionVideo לא נושאים באחריות לכל נזק ישיר או עקיף 💥",
+      "mainService": {
+        "description": "שיחת וידאו",
+        "duration": "10 דקות",
+        "price": "250 ₪"
+      },
+      "moreServices": [
+        {
+          "description": "שיחת וידאו",
+          "duration": "20 דקות",
+          "price": "400 ₪"
+        },
+        {
+          "description": "סקסטינג & סרטונים אישיים",
+          "duration": "10 דקות + 2 סרטונים אישיים",
+          "price": "200 ₪"
+        },
+        {
+          "description": "מכירת פריטים אישיים",
+          "items": [
+            {
+              "type": "גרביים",
+              "price": "150 ₪",
+              "shippingIncluded": true
+            },
+            {
+              "type": "תחתונים",
+              "price": "150 ₪",
+              "shippingIncluded": true
+            },
+            {
+              "type": "חזייה",
+              "price": "150 ₪",
+              "shippingIncluded": true
+            }
+          ]
+        }
+      ],
+      "age": 25,
+      "isAvailable": true,
+      "id": 3
+    }
+  ]
+}
