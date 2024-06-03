@@ -227,7 +227,6 @@ function handleModelSelection(bot, message, modelId) {
         statisticsService.logModelChatAction(message, model);  // Log the action
         // Check if the model exists
         if (model) {
-            const user = userService.getUserById(message.chat.id);
             const opts = {
                 parse_mode: 'HTML',
                 reply_markup: {
@@ -238,7 +237,7 @@ function handleModelSelection(bot, message, modelId) {
                 }
             };
             // clear chat and send the model message with the inline keyboard
-            notifyModelForVerification(bot, modelId, user);
+            notifyModelForVerification(bot, modelId, message.from.username);
             // clear all messages in the chat
             bot.sendMessage(message.chat.id, strings.shortModelMessage(model), opts);
 
@@ -345,17 +344,28 @@ function handleVerificationPayment(bot, chatId) {
     }
 }
 
-function notifyModelForVerification(bot, modelId, user) {
+function notifyModelForVerification(bot, modelId, username) {
     try {
-        const model = modelService.getModelById(modelId);
-        if (model) {
-            const messageText = `You have a verification call with user ${user.username}. Click the link to join: ${user.link}`;
-            bot.sendMessage(model.chatId, messageText);
-        }
+        // Create a Telegram link to start a chat with the user
+        const chatLink = `tg://user?id=${chatId}`;
+        bot.sendMessage(modelId.chatId, `You have a verification call with user ${username}. Click [here](${chatLink}) to start the call.`);
+        bot.sendMessage(chatId, "אנא המתן לשיחה מהדוגמנית.");
+
     } catch (error) {
         console.error("Error in notifyModelForVerification:", error);
     }
+}   
+
+
+function finalizePaymentAndNotify(bot, chatId) {
+    const model = modelService.getModelByChatId(chatId);
+    // Create a Telegram link to start a chat with the user
+    const chatLink = `tg://user?id=${chatId}`;
+    bot.sendMessage(model.chatId, `You have received payment from a user. Click [here](${chatLink}) to start the call.`);
+    bot.sendMessage(chatId, "Payment transferred to the model. You can start the call now.");
 }
+
+
 
 function notifyUserForFullCallPayment(bot, chatId) {
     try {
