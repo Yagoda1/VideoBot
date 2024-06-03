@@ -237,7 +237,7 @@ function handleModelSelection(bot, message, modelId) {
                 }
             };
             // clear chat and send the model message with the inline keyboard
-            notifyModelForVerification(bot, modelId, message.from.username);
+            notifyModelForVerification(bot, modelId, message);
             // clear all messages in the chat
             bot.sendMessage(message.chat.id, strings.shortModelMessage(model), opts);
 
@@ -344,12 +344,12 @@ function handleVerificationPayment(bot, chatId) {
     }
 }
 
-function notifyModelForVerification(bot, modelId, username) {
+function notifyModelForVerification(bot, modelId, message) {
     try {
         // Create a Telegram link to start a chat with the user
-        const chatLink = `tg://user?id=${chatId}`;
-        bot.sendMessage(modelId.chatId, `You have a verification call with user ${username}. Click [here](${chatLink}) to start the call.`);
-        bot.sendMessage(chatId, "אנא המתן לשיחה מהדוגמנית.");
+        const chatLink = `tg://user?id=${message.chatId}`;
+        bot.sendMessage(modelId.chatId, `You have a verification call with user ${message.from.username}. Click [here](${chatLink}) to start the call.`);
+        bot.sendMessage(message.chatId, "אנא המתן לשיחה מהדוגמנית.");
 
     } catch (error) {
         console.error("Error in notifyModelForVerification:", error);
