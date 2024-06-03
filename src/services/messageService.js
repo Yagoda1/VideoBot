@@ -211,11 +211,13 @@ function processFullCallPayment(bot, chatId) {
 
 function finalizePaymentAndNotify(bot, chatId) {
     const model = modelService.getModelByChatId(chatId);
-    const user = userService.getUserById(chatId);
-    // Implement payment transfer to the model
-    bot.sendMessage(model.chatId, `You have received payment from user ${user.username}. Here is the link to start the call: ${user.link}`);
+    // Create a Telegram link to start a chat with the user
+    const chatLink = `tg://user?id=${chatId}`;
+    bot.sendMessage(model.chatId, `You have received payment from a user. Click [here](${chatLink}) to start the call.`);
     bot.sendMessage(chatId, "Payment transferred to the model. You can start the call now.");
 }
+
+
 
 //handleModelSelection
 function handleModelSelection(bot, message, modelId) {
