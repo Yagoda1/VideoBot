@@ -386,7 +386,7 @@ function notifyModelForVerification(bot, model, message) {
         const chatLink = `tg://user?id=${message.chat.id}`;
         const messageText = `You have a verification call with user ${message.from.username}. Click [here](${chatLink}) to start the call.`;
         const keyboard = {
-            inline_keyboard: [[{ text: "Verification Call Done", callback_data: "verification_done" }]]
+            inline_keyboard: [[{ text: "Verification Call Done", callback_data: `verification_done_${message.chat.id}` }]]
         };
         const options = {
             parse_mode: "Markdown",
