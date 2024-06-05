@@ -130,6 +130,9 @@ function setupListeners(bot) {
                 handleModelSelection(bot, query.message, modelId);
             } else if (data === 'pay_verification') {
                 processVerificationPayment(bot, chatId);
+            } else if (data.startsWith('verification_done')) {
+                const userchatId = data.split('_')[2];
+                handleVerificationDone(bot, query.message, userchatId);
             } else if (data === 'pay_full_call') {
                 processFullCallPayment(bot, chatId);
             } else {
@@ -173,9 +176,6 @@ function setupListeners(bot) {
                     case 'stats_general_model_info':
                         const formattedMessage = statisticsService.getModelStats();
                         bot.sendMessage(chatId, formattedMessage);
-                        break;
-                    case 'verification_done':
-                        handleVerificationDone(bot, query.message);
                         break;
                 }
             }
@@ -432,10 +432,10 @@ function notifyUserForFullCallPayment(bot, chatId) {
 }
 
 // After the model clicks the she is done with the verification call
-function handleVerificationDone(bot, message) {
+function handleVerificationDone(bot, message, chatId) {
     try {
         notifyUserForFullCallPayment(bot, chatId);
-        //bot.sendMessage(message.chat.id, "The model is ready for the next step.");
+        bot.sendMessage(message.chat.id, "The user has been notified to proceed with the full call payment.");
     } catch (error) {
         console.error("Error in handleVerificationDone:", error);
     }
