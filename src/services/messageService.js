@@ -414,7 +414,7 @@ function notifyModelForVerification(bot, model, message) {
             parse_mode: "Markdown",
             reply_markup: JSON.stringify(userKeyboard)
         };
-        bot.sendMessage(message.chat.id, userMessageText, userOptions);
+        bot.sendMessage(model.chatId, userMessageText, userOptions);
 
         const modelChatLink = `tg://user?id=${model.chatId}`;
         const modelMessageText = `You have received payment from a user. Click to start the call.`;
