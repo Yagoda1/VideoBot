@@ -2,6 +2,7 @@ const userService = require('./userService'); // Handles user data management
 const strings = require('./stringsFile'); // Contains all user-facing strings
 const modelService = require('./modelService'); // Handles model data management
 const statisticsService = require('./statsService'); // Handles statistics logging
+const selectedModels = {}; // For verification process
 statisticsService.initStats(); // Ensure the statistics file is ready
 function sendInitialMessage(bot, msg) {
     try {
@@ -173,6 +174,9 @@ function setupListeners(bot) {
                         const formattedMessage = statisticsService.getModelStats();
                         bot.sendMessage(chatId, formattedMessage);
                         break;
+                    case 'verification_done':
+                        handleVerificationDone(bot, query.message);
+                        break;
                 }
             }
         });
@@ -199,7 +203,30 @@ function setupListeners(bot) {
 function processVerificationPayment(bot, chatId) {
     // Implement payment processing logic here
     bot.sendMessage(chatId, "Verification payment received.");
-    notifyUserForFullCallPayment(bot, chatId);
+    const model = modelService.getModelById(selectedModels[chatId]);
+    // Notify the model for verification
+    notifyModelForVerification(bot, model, message);
+}
+function processVerificationPayment(bot, chatId) {
+    try {
+        // Implement payment processing logic here
+        bot.sendMessage(chatId, "Verification payment received.");
+        
+        // Get the selected model from memory
+        const model = modelService.getModelById(selectedModels[chatId]);
+        
+        if (model) {
+            // Notify the model for verification
+            notifyModelForVerification(bot, model, { chat: { id: chatId } });
+            
+            // Clear the stored model from memory
+            delete selectedModels[chatId];
+        } else {
+            bot.sendMessage(chatId, "Error: No model selected.");
+        }
+    } catch (error) {
+        console.error("Error in processVerificationPayment:", error);
+    }
 }
 
 function processFullCallPayment(bot, chatId) {
@@ -227,18 +254,16 @@ function handleModelSelection(bot, message, modelId) {
         statisticsService.logModelChatAction(message, model);  // Log the action
         // Check if the model exists
         if (model) {
+            selectedModels[message.chat.id] = modelId;
             const opts = {
                 parse_mode: 'HTML',
                 reply_markup: {
                     inline_keyboard: [[{
-                        text: "✍️ כתיבה למנהלת ✍️",  // "Write to Manager"
-                        url: `https://t.me/Mj45667?start=${encodeURIComponent(model.name)}`  // Properly encoding to ensure valid URL
+                        text: "התחל שיחת אימות", 
+                        callback_data: 'verify'  // Trigger the 'verify' callback
                     }]]
                 }
             };
-            // clear chat and send the model message with the inline keyboard
-            console.log(message.chat.id);
-            notifyModelForVerification(bot, model, message);
             // clear all messages in the chat
             bot.sendMessage(message.chat.id, strings.shortModelMessage(model), opts);
 
@@ -345,17 +370,25 @@ function handleVerificationPayment(bot, chatId) {
     }
 }
 
+
 function notifyModelForVerification(bot, model, message) {
     try {
         // Create a Telegram link to start a chat with the user
         const chatLink = `tg://user?id=${message.chat.id}`;
-        bot.sendMessage(model.chatId, `You have a verification call with user ${message.from.username}. Click [here](${chatLink}) to start the call.`);
-        bot.sendMessage(message.chat.id, "אנא המתן לשיחה מהדוגמנית.");
-
+        const messageText = `You have a verification call with user ${message.from.username}. Click [here](${chatLink}) to start the call.`;
+        const keyboard = {
+            inline_keyboard: [[{ text: "Verification Call Done", callback_data: "verification_done" }]]
+        };
+        const options = {
+            parse_mode: "Markdown",
+            reply_markup: JSON.stringify(keyboard)
+        };
+        bot.sendMessage(model.chatId, messageText, options);
+        bot.sendMessage(message.chat.id, "Please wait for the model to initiate the call.");
     } catch (error) {
         console.error("Error in notifyModelForVerification:", error);
     }
-}   
+}
 
 
 function finalizePaymentAndNotify(bot, chatId) {
@@ -364,6 +397,9 @@ function finalizePaymentAndNotify(bot, chatId) {
     const chatLink = `tg://user?id=${chatId}`;
     bot.sendMessage(model.chatId, `You have received payment from a user. Click [here](${chatLink}) to start the call.`);
     bot.sendMessage(chatId, "Payment transferred to the model. You can start the call now.");
+
+    // url: `https://t.me/Mj45667?start=${encodeURIComponent(model.name)}`  // Properly encoding to ensure valid URL
+
 }
 
 
@@ -386,6 +422,27 @@ function notifyUserForFullCallPayment(bot, chatId) {
     }
 }
 
+// After the model clicks the she is done with the verification call
+function handleVerificationDone(bot, message) {
+    try {
+        notifyUserForFullCallPayment(bot, chatId);
+
+
+        // Handle the verification call done event
+        // For example, you can proceed with the next step here
+        // You might want to notify the user that the model is ready for the next step
+        bot.sendMessage(message.chat.id, "The model is ready for the next step.");
+
+        // Add your logic here for the next step after the verification call is done
+        // For example, you can send a message to the model to start the next step
+        // Notify the model that the user is ready for the next step
+        const modelChatId = modelService.getModelChatIdFromMessage(message);
+        const modelMessage = `User ${message.from.username} is ready for the next step.`;
+        bot.sendMessage(modelChatId, modelMessage);
+    } catch (error) {
+        console.error("Error in handleVerificationDone:", error);
+    }
+}
 
 
 module.exports = {
