@@ -223,9 +223,6 @@ function processVerificationPayment(bot, chatId) {
 
             // Notify the model for verification
             notifyModelForVerification(bot, model, mockMessage);
-            
-            // Clear the stored model from memory
-            delete selectedModels[chatId];
         } else {
             bot.sendMessage(chatId, "Error: No model found.");
         }
@@ -244,13 +241,6 @@ function processFullCallPayment(bot, chatId) {
 
 function finalizePaymentAndNotify(bot, chatId) {
     const selection = selectedModels[chatId];
-
-
-    console.log("Chat ID:", chatId);
-    console.log("Selection:", selection);
-    console.log("Selected Models Dump:", selectedModels);
-
-
     if (!selection) {
         bot.sendMessage(chatId, "Error: No model selected.");
         return;
@@ -405,7 +395,6 @@ function handleVerificationPayment(bot, chatId) {
 function notifyModelForVerification(bot, model, message) {
     try {
         // Create a Telegram link to start a chat with the user
-        const userChatLink = `tg://user?id=${message.chat.id}`;
         const userMessageText = `Click when you are done.`;
         const userKeyboard = {
             inline_keyboard: [[{ text: "Verification Call Done", callback_data: `verification_done_${message.chat.id}` }]]
@@ -416,10 +405,10 @@ function notifyModelForVerification(bot, model, message) {
         };
         bot.sendMessage(model.chatId, userMessageText, userOptions);
 
-        const modelChatLink = `tg://user?id=${model.chatId}`;
+        const userChatLink = `tg://user?id=${message.chat.id}`;
         const modelMessageText = `You have received payment from a user. Click to start the call.`;
         const modelKeyboard = {
-            inline_keyboard: [[{ text: "Start Call", url: modelChatLink }]]
+            inline_keyboard: [[{ text: "Start Call", url: userChatLink }]]
         };
         const modelOptions = {
             parse_mode: "Markdown",
