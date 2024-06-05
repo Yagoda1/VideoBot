@@ -405,33 +405,33 @@ function handleVerificationPayment(bot, chatId) {
 function notifyModelForVerification(bot, model, message) {
     try {
         // Create a Telegram link to start a chat with the user
-
-        const chatLink = `tg://user?id=${chatId}`;
-        const messageText = `You have received payment from a user. Click to start the call.`;
-        const keyboard = {
-            inline_keyboard: [[{ text: "Start Call", url: chatLink }]]
-        };
-        const options = {
-            parse_mode: "Markdown",
-            reply_markup: JSON.stringify(keyboard)
-        };
-        bot.sendMessage(model.chatId, messageText, options);
-
-        const chatLink = `tg://user?id=${message.chat.id}`;
-        const messageText = `Click when you are done.`;
-        const keyboard = {
+        const userChatLink = `tg://user?id=${message.chat.id}`;
+        const userMessageText = `Click when you are done.`;
+        const userKeyboard = {
             inline_keyboard: [[{ text: "Verification Call Done", callback_data: `verification_done_${message.chat.id}` }]]
         };
-        const options = {
+        const userOptions = {
             parse_mode: "Markdown",
-            reply_markup: JSON.stringify(keyboard)
+            reply_markup: JSON.stringify(userKeyboard)
         };
-        bot.sendMessage(model.chatId, messageText, options);
+        bot.sendMessage(message.chat.id, userMessageText, userOptions);
+
+        const modelChatLink = `tg://user?id=${model.chatId}`;
+        const modelMessageText = `You have received payment from a user. Click to start the call.`;
+        const modelKeyboard = {
+            inline_keyboard: [[{ text: "Start Call", url: modelChatLink }]]
+        };
+        const modelOptions = {
+            parse_mode: "Markdown",
+            reply_markup: JSON.stringify(modelKeyboard)
+        };
+        bot.sendMessage(model.chatId, modelMessageText, modelOptions);
         bot.sendMessage(message.chat.id, "Please wait for the model to initiate the call.");
     } catch (error) {
         console.error("Error in notifyModelForVerification:", error);
     }
 }
+
 
 function notifyUserForFullCallPayment(bot, chatId) {
     try {
