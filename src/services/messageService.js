@@ -244,6 +244,9 @@ function processFullCallPayment(bot, chatId) {
 
 function finalizePaymentAndNotify(bot, chatId) {
     const selection = selectedModels[chatId];
+    console.log(chatId);
+    console.log(selection);
+
     if (!selection) {
         bot.sendMessage(chatId, "Error: No model selected.");
         return;
