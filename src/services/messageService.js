@@ -203,7 +203,7 @@ function setupListeners(bot) {
 function processVerificationPayment(bot, chatId) {
     try {
         // Implement payment processing logic here
-        bot.sendMessage(chatId, "Verification payment received.");
+        bot.sendMessage(chatId, "התקבל תשלום עבור האימות.");
         
         // Get the selected model and username from memory
         const selection = selectedModels[chatId];
@@ -234,7 +234,7 @@ function processVerificationPayment(bot, chatId) {
 
 function processFullCallPayment(bot, chatId) {
     // Implement payment processing logic here
-    bot.sendMessage(chatId, "Full call payment received.");
+    bot.sendMessage(chatId, "התקבל תשלום עבור שיחה מלאה.");
     // Transfer money to the model and notify both parties
     finalizePaymentAndNotify(bot, chatId);
 }
@@ -376,12 +376,12 @@ function checkVerificationCode(bot, chatId, inputCode) {
 function handleVerificationPayment(bot, chatId) {
     try {
         const price = 10; // Verification price in shekels
-        const messageText = `The verification call will cost ${price} shekels. Please confirm your payment.`;
+        const messageText = `שיחת האימות תעלה ${price} שקלים. אנא אשר את התשלום.`;
         const options = {
             parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: 'Pay Now', callback_data: 'pay_verification' }]
+                    [{ text: 'שלם עכשיו', callback_data: 'pay_verification' }]
                 ]
             }
         };
@@ -415,7 +415,7 @@ function notifyModelForVerification(bot, model, message) {
             reply_markup: JSON.stringify(modelKeyboard)
         };
         bot.sendMessage(model.chatId, modelMessageText, modelOptions);
-        bot.sendMessage(message.chat.id, "Please wait for the model to initiate the call.");
+        bot.sendMessage(message.chat.id, "אנא המתן, הדוגמנית תתקשר אלייך בעוד רגע.");
     } catch (error) {
         console.error("Error in notifyModelForVerification:", error);
     }
@@ -425,12 +425,12 @@ function notifyModelForVerification(bot, model, message) {
 function notifyUserForFullCallPayment(bot, chatId) {
     try {
         const price = 50; // Full call price in shekels
-        const messageText = `The full call will cost ${price} shekels. Please confirm your payment.`;
+        const messageText = `השיחה המלאה תעלה ${price} שקלים. אנא אשר את התשלום.`;
         const options = {
             parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: 'Pay Now', callback_data: 'pay_full_call' }]
+                    [{ text: 'שלם עכשיו', callback_data: 'pay_full_call' }]
                 ]
             }
         };
