@@ -435,19 +435,7 @@ function notifyUserForFullCallPayment(bot, chatId) {
 function handleVerificationDone(bot, message) {
     try {
         notifyUserForFullCallPayment(bot, chatId);
-
-
-        // Handle the verification call done event
-        // For example, you can proceed with the next step here
-        // You might want to notify the user that the model is ready for the next step
-        bot.sendMessage(message.chat.id, "The model is ready for the next step.");
-
-        // Add your logic here for the next step after the verification call is done
-        // For example, you can send a message to the model to start the next step
-        // Notify the model that the user is ready for the next step
-        const modelChatId = modelService.getModelChatIdFromMessage(message);
-        const modelMessage = `User ${message.from.username} is ready for the next step.`;
-        bot.sendMessage(modelChatId, modelMessage);
+        //bot.sendMessage(message.chat.id, "The model is ready for the next step.");
     } catch (error) {
         console.error("Error in handleVerificationDone:", error);
     }
