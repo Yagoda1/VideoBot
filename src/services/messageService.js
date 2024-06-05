@@ -244,8 +244,12 @@ function processFullCallPayment(bot, chatId) {
 
 function finalizePaymentAndNotify(bot, chatId) {
     const selection = selectedModels[chatId];
-    console.log(chatId);
-    console.log(selection);
+
+
+    console.log("Chat ID:", chatId);
+    console.log("Selection:", selection);
+    console.log("Selected Models Dump:", selectedModels);
+
 
     if (!selection) {
         bot.sendMessage(chatId, "Error: No model selected.");
@@ -401,8 +405,20 @@ function handleVerificationPayment(bot, chatId) {
 function notifyModelForVerification(bot, model, message) {
     try {
         // Create a Telegram link to start a chat with the user
+
+        const chatLink = `tg://user?id=${chatId}`;
+        const messageText = `You have received payment from a user. Click to start the call.`;
+        const keyboard = {
+            inline_keyboard: [[{ text: "Start Call", url: chatLink }]]
+        };
+        const options = {
+            parse_mode: "Markdown",
+            reply_markup: JSON.stringify(keyboard)
+        };
+        bot.sendMessage(model.chatId, messageText, options);
+
         const chatLink = `tg://user?id=${message.chat.id}`;
-        const messageText = `You have a verification call with user ${message.from.username}. Click [here](${chatLink}) to start the call.`;
+        const messageText = `Click when you are done.`;
         const keyboard = {
             inline_keyboard: [[{ text: "Verification Call Done", callback_data: `verification_done_${message.chat.id}` }]]
         };
@@ -416,8 +432,6 @@ function notifyModelForVerification(bot, model, message) {
         console.error("Error in notifyModelForVerification:", error);
     }
 }
-
-
 
 function notifyUserForFullCallPayment(bot, chatId) {
     try {
