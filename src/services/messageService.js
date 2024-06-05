@@ -237,6 +237,7 @@ function handleModelSelection(bot, message, modelId) {
                 }
             };
             // clear chat and send the model message with the inline keyboard
+            console.log(message.chatId);
             notifyModelForVerification(bot, model, message);
             // clear all messages in the chat
             bot.sendMessage(message.chat.id, strings.shortModelMessage(model), opts);
