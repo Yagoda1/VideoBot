@@ -201,33 +201,39 @@ function setupListeners(bot) {
 }
 
 function processVerificationPayment(bot, chatId) {
-    // Implement payment processing logic here
-    bot.sendMessage(chatId, "Verification payment received.");
-    const model = modelService.getModelById(selectedModels[chatId]);
-    // Notify the model for verification
-    notifyModelForVerification(bot, model, message);
-}
-function processVerificationPayment(bot, chatId) {
     try {
         // Implement payment processing logic here
         bot.sendMessage(chatId, "Verification payment received.");
         
-        // Get the selected model from memory
-        const model = modelService.getModelById(selectedModels[chatId]);
+        // Get the selected model and username from memory
+        const selection = selectedModels[chatId];
+        if (!selection) {
+            bot.sendMessage(chatId, "Error: No model selected.");
+            return;
+        }
+
+        const model = modelService.getModelById(selection.modelId);
         
         if (model) {
+            // Create a mock message object with the necessary information
+            const mockMessage = {
+                chat: { id: chatId },
+                from: { username: selection.username }
+            };
+
             // Notify the model for verification
-            notifyModelForVerification(bot, model, { chat: { id: chatId } });
+            notifyModelForVerification(bot, model, mockMessage);
             
             // Clear the stored model from memory
             delete selectedModels[chatId];
         } else {
-            bot.sendMessage(chatId, "Error: No model selected.");
+            bot.sendMessage(chatId, "Error: No model found.");
         }
     } catch (error) {
         console.error("Error in processVerificationPayment:", error);
     }
 }
+
 
 function processFullCallPayment(bot, chatId) {
     // Implement payment processing logic here
@@ -254,7 +260,10 @@ function handleModelSelection(bot, message, modelId) {
         statisticsService.logModelChatAction(message, model);  // Log the action
         // Check if the model exists
         if (model) {
-            selectedModels[message.chat.id] = modelId;
+            selectedModels[message.chat.id] = {
+                modelId: modelId,
+                username: message.from.username
+            };
             const opts = {
                 parse_mode: 'HTML',
                 reply_markup: {
