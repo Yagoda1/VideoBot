@@ -347,9 +347,9 @@ function handleVerificationPayment(bot, chatId) {
 function notifyModelForVerification(bot, model, message) {
     try {
         // Create a Telegram link to start a chat with the user
-        const chatLink = `tg://user?id=${message.chatId}`;
+        const chatLink = `tg://user?id=${message.chat.id}`;
         bot.sendMessage(model.chatId, `You have a verification call with user ${message.from.username}. Click [here](${chatLink}) to start the call.`);
-        bot.sendMessage(message.chatId, "אנא המתן לשיחה מהדוגמנית.");
+        bot.sendMessage(message.chat.id, "אנא המתן לשיחה מהדוגמנית.");
 
     } catch (error) {
         console.error("Error in notifyModelForVerification:", error);
