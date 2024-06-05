@@ -243,11 +243,26 @@ function processFullCallPayment(bot, chatId) {
 }
 
 function finalizePaymentAndNotify(bot, chatId) {
-    const model = modelService.getModelByChatId(chatId);
+    const selection = selectedModels[chatId];
+    if (!selection) {
+        bot.sendMessage(chatId, "Error: No model selected.");
+        return;
+    }
+    const model = modelService.getModelById(selection.modelId);
     // Create a Telegram link to start a chat with the user
     const chatLink = `tg://user?id=${chatId}`;
-    bot.sendMessage(model.chatId, `You have received payment from a user. Click [here](${chatLink}) to start the call.`);
-    bot.sendMessage(chatId, "Payment transferred to the model. You can start the call now.");
+    const messageText = `You have received payment from a user.`;
+    const keyboard = {
+        inline_keyboard: [[{ text: "Start Call", url: chatLink }]]
+    };
+    const options = {
+        parse_mode: "Markdown",
+        reply_markup: JSON.stringify(keyboard)
+    };
+    bot.sendMessage(model.chatId, messageText, options);
+    bot.sendMessage(chatId, "Please wait for the model to initiate the call.");
+
+    // url: `https://t.me/Mj45667?start=${encodeURIComponent(model.name)}`  // Properly encoding to ensure valid URL
 }
 
 
@@ -397,18 +412,6 @@ function notifyModelForVerification(bot, model, message) {
     } catch (error) {
         console.error("Error in notifyModelForVerification:", error);
     }
-}
-
-
-function finalizePaymentAndNotify(bot, chatId) {
-    const model = modelService.getModelByChatId(chatId);
-    // Create a Telegram link to start a chat with the user
-    const chatLink = `tg://user?id=${chatId}`;
-    bot.sendMessage(model.chatId, `You have received payment from a user. Click [here](${chatLink}) to start the call.`);
-    bot.sendMessage(chatId, "Payment transferred to the model. You can start the call now.");
-
-    // url: `https://t.me/Mj45667?start=${encodeURIComponent(model.name)}`  // Properly encoding to ensure valid URL
-
 }
 
 
