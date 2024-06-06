@@ -125,6 +125,7 @@ function setupListeners(bot) {
         bot.on('callback_query', (query) => {
             const data = query.data;
             const chatId = query.message.chat.id;
+            console.log(chatId);
             if (data.startsWith('select-')) {
                 const modelId = data.split('-')[1];
                 handleModelSelection(bot, query.message, modelId);
@@ -257,7 +258,7 @@ function finalizePaymentAndNotify(bot, chatId) {
         reply_markup: JSON.stringify(keyboard)
     };
     bot.sendMessage(model.chatId, messageText, options);
-    bot.sendMessage(chatId, "Please wait for the model to initiate the call.");
+    bot.sendMessage(chatId, "אנא המתן, הדוגמנית תתקשר אלייך בעוד רגע.");
 
     // url: `https://t.me/Mj45667?start=${encodeURIComponent(model.name)}`  // Properly encoding to ensure valid URL
 }
@@ -395,16 +396,6 @@ function handleVerificationPayment(bot, chatId) {
 function notifyModelForVerification(bot, model, message) {
     try {
         // Create a Telegram link to start a chat with the user
-        const userMessageText = `Click when you are done.`;
-        const userKeyboard = {
-            inline_keyboard: [[{ text: "Verification Call Done", callback_data: `verification_done_${message.chat.id}` }]]
-        };
-        const userOptions = {
-            parse_mode: "Markdown",
-            reply_markup: JSON.stringify(userKeyboard)
-        };
-        bot.sendMessage(model.chatId, userMessageText, userOptions);
-
         const userChatLink = `tg://user?id=${message.chat.id}`;
         const modelMessageText = `You have received payment from a user. Click to start the call.`;
         const modelKeyboard = {
@@ -415,6 +406,17 @@ function notifyModelForVerification(bot, model, message) {
             reply_markup: JSON.stringify(modelKeyboard)
         };
         bot.sendMessage(model.chatId, modelMessageText, modelOptions);
+
+        const userMessageText = `Click when you are done.`;
+        const userKeyboard = {
+            inline_keyboard: [[{ text: "Verification Call Done", callback_data: `verification_done_${message.chat.id}` }]]
+        };
+        const userOptions = {
+            parse_mode: "Markdown",
+            reply_markup: JSON.stringify(userKeyboard)
+        };
+        bot.sendMessage(model.chatId, userMessageText, userOptions);
+
         bot.sendMessage(message.chat.id, "אנא המתן, הדוגמנית תתקשר אלייך בעוד רגע.");
     } catch (error) {
         console.error("Error in notifyModelForVerification:", error);
