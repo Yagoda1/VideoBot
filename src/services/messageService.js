@@ -499,6 +499,8 @@ function handleVerificationDone(bot, message, chatId) {
 function handleChooseCall(bot, query) {
     const chatId = query.message.chat.id;
     const [_, duration, price] = query.data.split('-');
+    const selection = selectedModels[chatId];
+    selection.bitImage = true;
 
     const messageText = `בחרת בשיחה של ${duration} דקות במחיר של ${price} שקלים. יש להעביר בביט למספר 0539238949, לשלוח צילום מסך ולאחר מכן ללחוץ על 'שילמתי'.`;
     const options = {
@@ -529,6 +531,7 @@ async function handleImageUpload(bot, msg) {
 
     if(!selection.bitImage) {
         bot.sendMessage(chatId, "אין לשלוח תמונות.");
+        return;
     }
 
     if (msg.photo && msg.photo.length > 0) {
