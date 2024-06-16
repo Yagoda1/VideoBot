@@ -527,7 +527,7 @@ async function handleImageUpload(bot, msg) {
         const photo = msg.photo[msg.photo.length - 1]; // Get the highest resolution photo
         const fileId = photo.file_id;
         const timestamp = new Date().toISOString().replace(/[-:.]/g, '').replace('T', '-').slice(0, 15);
-        const newFileName = `${userId}-${model.id}-${timestamp}.jpg`;
+        const newFileName = `${chatId}-${model.id}-${timestamp}.jpg`;
         const filePath = path.join(__dirname, 'data/screenshots', newFileName);
 
         try {
