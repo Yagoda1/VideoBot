@@ -130,7 +130,6 @@ function setupListeners(bot) {
                 handleModelSelection(bot, query.message, modelId);
             } else if (data.startsWith('choose_call-')) {
                 handleChooseCall(bot, query);
-            }
             } else if (data === 'pay_verification') {
                 processVerificationPayment(bot, chatId);
             } else if (data.startsWith('verification_done')) {
