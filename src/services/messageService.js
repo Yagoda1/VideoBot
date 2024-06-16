@@ -1,3 +1,4 @@
+const path = require('path');
 const userService = require('./userService'); // Handles user data management
 const strings = require('./stringsFile'); // Contains all user-facing strings
 const modelService = require('./modelService'); // Handles model data management
@@ -528,7 +529,8 @@ async function handleImageUpload(bot, msg) {
         const fileId = photo.file_id;
         const timestamp = new Date().toISOString().replace(/[-:.]/g, '').replace('T', '-').slice(0, 15);
         const newFileName = `${chatId}-${model.id}-${timestamp}.jpg`;
-        const filePath = path.join(__dirname, 'data/screenshots', newFileName);
+        //const filePath = path.join(__dirname, 'data/screenshots', newFileName);
+        const filePath = path.join(__dirname, '../../data/screenshots', newFileName);
 
         try {
             const file = await bot.getFile(fileId);
