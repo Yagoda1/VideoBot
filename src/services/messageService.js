@@ -283,7 +283,8 @@ function handleModelSelection(bot, message, modelId) {
         if (model) {
             selectedModels[message.chat.id] = {
                 modelId: modelId,
-                username: message.from.username
+                username: message.from.username,
+                bitImage: false
             };
             const opts = {
                 parse_mode: 'HTML',
@@ -526,6 +527,10 @@ async function handleImageUpload(bot, msg) {
         return;
     }
 
+    if(!selection.bitImage) {
+        bot.sendMessage(chatId, "אין לשלוח תמונות.");
+    }
+
     if (msg.photo && msg.photo.length > 0) {
         const photo = msg.photo[msg.photo.length - 1]; // Get the highest resolution photo
         const fileId = photo.file_id;
@@ -542,6 +547,18 @@ async function handleImageUpload(bot, msg) {
             writeStream.on('finish', () => {
                 console.log(`File saved as ${newFileName}`);
                 bot.sendMessage(chatId, 'התמונה נשמרה בהצלחה.');
+                selection.bitImage = true;
+
+                // Send the image to the specified username
+                /*const targetUsername = "Mj45667";
+                try {
+                    const targetUser = await bot.getChat(`@${targetUsername}`);
+                    await bot.sendPhoto(targetUser.id, filePath, { caption: 'התקבלה תמונה מהמשתמש' });
+                    console.log(`Image sent to ${targetUsername}`);
+                } catch (error) {
+                    console.error(`Error sending image to ${targetUsername}:`, error);
+                    bot.sendMessage(chatId, `שגיאה בשליחת התמונה ל-${targetUsername}.`);
+                }*/
             });
         } catch (error) {
             console.error('Error saving photo:', error);
