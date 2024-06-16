@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const userService = require('./userService'); // Handles user data management
 const strings = require('./stringsFile'); // Contains all user-facing strings
 const modelService = require('./modelService'); // Handles model data management
