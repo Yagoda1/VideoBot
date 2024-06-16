@@ -469,7 +469,7 @@ function notifyUserForFullCallPayment(bot, chatId) {
             parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: videoCallDetails.map(call => {
-                    return [{ text: `משך השיחה: ${call.duration} דקות, מחיר: ${call.price} ₪`, callback_data: `select_call-${call.duration}-${call.price}` }];
+                    return [{ text: `משך השיחה: ${call.duration} דקות, מחיר: ${call.price} ₪`, callback_data: `choose_call-${call.duration}-${call.price}` }];
                 })
             }
         };
