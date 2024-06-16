@@ -68,7 +68,6 @@ function handleHelpSelection(bot, message) {
 
 
 // handleContactSelection
-
 function handleContactSelection(bot, message) {
     try {
         const messageText = strings.contactMessage;
@@ -129,6 +128,9 @@ function setupListeners(bot) {
             if (data.startsWith('select-')) {
                 const modelId = data.split('-')[1];
                 handleModelSelection(bot, query.message, modelId);
+            } else if (data.startsWith('choose_call-')) {
+                handleChooseCall(bot, query);
+            }
             } else if (data === 'pay_verification') {
                 processVerificationPayment(bot, chatId);
             } else if (data.startsWith('verification_done')) {
@@ -196,6 +198,10 @@ function setupListeners(bot) {
                 handleAdminStatsRequest(bot, query);
             }
         });
+
+        bot.on('photo', (msg) => {
+            handleImageUpload(bot, msg);
+        });        
     } catch (error) {
         console.error("Error in setupListeners:", error);
     }
@@ -338,13 +344,6 @@ async function handleCatalogSelection(bot, query) {
     }
 }
 
-
-
-
-
-
-
-
 /// new 
 
 function handleMessage(bot, msg) {
@@ -373,7 +372,6 @@ function checkVerificationCode(bot, chatId, inputCode) {
 }
 
 // V2
-
 function handleVerificationPayment(bot, chatId) {
     try {
         const price = 10; // Verification price in shekels
@@ -382,7 +380,7 @@ function handleVerificationPayment(bot, chatId) {
             parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: 'שלם עכשיו', callback_data: 'pay_verification' }]
+                    [{ text: 'שילמתי', callback_data: 'pay_verification' }]
                 ]
             }
         };
@@ -391,7 +389,6 @@ function handleVerificationPayment(bot, chatId) {
         console.error("Error in handleVerificationPayment:", error);
     }
 }
-
 
 function notifyModelForVerification(bot, model, message) {
     try {
@@ -426,16 +423,59 @@ function notifyModelForVerification(bot, model, message) {
 
 function notifyUserForFullCallPayment(bot, chatId) {
     try {
-        const price = 50; // Full call price in shekels
-        const messageText = `השיחה המלאה תעלה ${price} שקלים. אנא אשר את התשלום.`;
+
+        // Get the selected model and username from memory
+        const selection = selectedModels[chatId];
+        if (!selection) {
+            bot.sendMessage(chatId, "Error: No model selected.");
+            return;
+        }
+
+        const model = modelService.getModelById(selection.modelId);
+        if (!model) {
+            bot.sendMessage(chatId, "Error: Model not found.");
+            return;
+        }
+
+        const videoCalls = [];
+
+        // Check the mainService
+        if (model.mainService && model.mainService.description === "שיחת וידאו") {
+            videoCalls.push({
+                duration: model.mainService.duration,
+                price: model.mainService.price
+            });
+        }
+
+        // Check the moreServices
+        if (model.moreServices && Array.isArray(model.moreServices)) {
+            model.moreServices.forEach(service => {
+                if (service.description === "שיחת וידאו") {
+                    videoCalls.push({
+                        duration: service.duration,
+                        price: service.price
+                    });
+                }
+            });
+        }
+
+        // Extract durations and prices into an array
+        const videoCallDetails = videoCalls.map(call => ({
+            duration: call.duration.match(/\d+/)[0],
+            price: call.price.match(/\d+/)[0]
+        }));
+
+        // Create inline keyboard options
         const options = {
             parse_mode: 'HTML',
             reply_markup: {
-                inline_keyboard: [
-                    [{ text: 'שלם עכשיו', callback_data: 'pay_full_call' }]
-                ]
+                inline_keyboard: videoCallDetails.map(call => {
+                    return [{ text: `משך השיחה: ${call.duration} דקות, מחיר: ${call.price} ₪`, callback_data: `select_call-${call.duration}-${call.price}` }];
+                })
             }
         };
+
+        const messageText = 'בחר את משך השיחה ומחיר:';
         bot.sendMessage(chatId, messageText, options);
     } catch (error) {
         console.error("Error in notifyUserForFullCallPayment:", error);
@@ -452,6 +492,22 @@ function handleVerificationDone(bot, message, chatId) {
     }
 }
 
+// Handler for 'choose_call' callback data
+function handleChooseCall(bot, query) {
+    const chatId = query.message.chat.id;
+    const [_, duration, price] = query.data.split('-');
+
+    const messageText = `בחרת בשיחה של ${duration} דקות במחיר של ${price} שקלים. אנא שלח תמונת אישור תשלום ולאחר מכן לחץ על 'שילמתי'.`;
+    const options = {
+        parse_mode: 'HTML',
+        reply_markup: {
+            inline_keyboard: [
+                [{ text: 'שילמתי', callback_data: `pay_confirm-${duration}-${price}` }]
+            ]
+        }
+    };
+    bot.sendMessage(chatId, messageText, options);
+}
 
 module.exports = {
     setupListeners
