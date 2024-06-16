@@ -132,13 +132,13 @@ function setupListeners(bot) {
                 handleModelSelection(bot, query.message, modelId);
             } else if (data.startsWith('choose_call-')) {
                 handleChooseCall(bot, query);
+            } else if (data.startsWith('pay_confirm-')) {
+                processFullCallPayment(bot, query);
             } else if (data === 'pay_verification') {
                 processVerificationPayment(bot, chatId);
             } else if (data.startsWith('verification_done')) {
                 const userchatId = data.split('_')[2];
                 handleVerificationDone(bot, query.message, userchatId);
-            } else if (data === 'pay_full_call') {
-                processFullCallPayment(bot, chatId);
             } else {
                 switch (data) {
                     case 'catalog':
@@ -240,7 +240,8 @@ function processVerificationPayment(bot, chatId) {
 }
 
 
-function processFullCallPayment(bot, chatId) {
+function processFullCallPayment(bot, query) {
+    const chatId = query.message.chat.id;
     // Implement payment processing logic here
     bot.sendMessage(chatId, "התקבל תשלום עבור שיחה מלאה.");
     // Transfer money to the model and notify both parties
@@ -498,7 +499,7 @@ function handleChooseCall(bot, query) {
     const chatId = query.message.chat.id;
     const [_, duration, price] = query.data.split('-');
 
-    const messageText = `בחרת בשיחה של ${duration} דקות במחיר של ${price} שקלים. אנא שלח תמונת אישור תשלום ולאחר מכן לחץ על 'שילמתי'.`;
+    const messageText = `בחרת בשיחה של ${duration} דקות במחיר של ${price} שקלים. יש להעביר בביט למספר 0539238949, לשלוח צילום מסך ולאחר מכן ללחוץ על 'שילמתי'.`;
     const options = {
         parse_mode: 'HTML',
         reply_markup: {
