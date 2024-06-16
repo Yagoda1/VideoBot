@@ -509,6 +509,46 @@ function handleChooseCall(bot, query) {
     bot.sendMessage(chatId, messageText, options);
 }
 
+// Function to handle image upload
+function handleImageUpload(bot, msg) {
+    const chatId = msg.chat.id;
+    const selection = selectedModels[chatId];
+    if (!selection) {
+        bot.sendMessage(chatId, "Error: No model selected.");
+        return;
+    }
+
+    const model = modelService.getModelById(selection.modelId);
+    if (!model) {
+        bot.sendMessage(chatId, "Error: Model not found.");
+        return;
+    }
+
+    if (msg.photo && msg.photo.length > 0) {
+        const photo = msg.photo[msg.photo.length - 1]; // Get the highest resolution photo
+        const fileId = photo.file_id;
+        const timestamp = new Date().toISOString().replace(/[-:.]/g, '').replace('T', '-').slice(0, 15);
+        const newFileName = `${userId}-${model.id}-${timestamp}.jpg`;
+        const filePath = path.join(__dirname, 'data/screenshots', newFileName);
+
+        try {
+            const file = await bot.getFile(fileId);
+            const fileStream = bot.getFileStream(fileId);
+            const writeStream = fs.createWriteStream(filePath);
+            fileStream.pipe(writeStream);
+            writeStream.on('finish', () => {
+                console.log(`File saved as ${newFileName}`);
+                bot.sendMessage(chatId, 'התמונה נשמרה בהצלחה.');
+            });
+        } catch (error) {
+            console.error('Error saving photo:', error);
+            bot.sendMessage(chatId, 'שגיאה בשמירת התמונה.');
+        }
+    } else {
+        bot.sendMessage(chatId, "אנא שלח תמונה.");
+    }
+}
+
 module.exports = {
     setupListeners
 };
