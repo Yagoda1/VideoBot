@@ -509,7 +509,7 @@ function handleChooseCall(bot, query) {
 }
 
 // Function to handle image upload
-function handleImageUpload(bot, msg) {
+async function handleImageUpload(bot, msg) {
     const chatId = msg.chat.id;
     const selection = selectedModels[chatId];
     if (!selection) {
