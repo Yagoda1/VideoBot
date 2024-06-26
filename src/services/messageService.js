@@ -245,6 +245,7 @@ function processFullCallPayment(bot, query) {
     // Implement payment processing logic here
     bot.sendMessage(chatId, "התקבל תשלום עבור שיחה מלאה.");
     // Transfer money to the model and notify both parties
+    const data = query.data;
     const customerId = data.split('-')[1];
     finalizePaymentAndNotify(bot, customerId);
 }
