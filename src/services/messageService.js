@@ -129,7 +129,7 @@ function setupListeners(bot) {
             console.log(chatId);
             const targetUsername = "Mj45667";
             try {
-                const targetUser = await bot.getChat(`@${targetUsername}`);
+                const targetUser = bot.getChat(`@${targetUsername}`);
                 console.log(targetUser.id);
             }
             if (data.startsWith('select-')) {
