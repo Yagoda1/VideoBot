@@ -127,16 +127,11 @@ function setupListeners(bot) {
             const data = query.data;
             const chatId = query.message.chat.id;
             console.log(chatId);
-            const targetUsername = "Mj45667";
-            const targetUser = bot.getChat(`@${targetUsername}`);
-            console.log(targetUser.id);
             if (data.startsWith('select-')) {
                 const modelId = data.split('-')[1];
                 handleModelSelection(bot, query.message, modelId);
             } else if (data.startsWith('choose_call-')) {
                 handleChooseCall(bot, query);
-            } else if (data.startsWith('pay_confirm-')) {
-                processFullCallPayment(bot, query);
             } else if (data.startsWith('bit-')) {
                 handleCBitAction(bot, query);
             } else if (data === 'pay_verification') {
@@ -250,7 +245,8 @@ function processFullCallPayment(bot, query) {
     // Implement payment processing logic here
     bot.sendMessage(chatId, "התקבל תשלום עבור שיחה מלאה.");
     // Transfer money to the model and notify both parties
-    finalizePaymentAndNotify(bot, chatId);
+    const customerId = data.split('-')[1];
+    finalizePaymentAndNotify(bot, customerId);
 }
 
 function finalizePaymentAndNotify(bot, chatId) {
@@ -520,22 +516,10 @@ function handleChooseCall(bot, query) {
 }
 
 // Handler for 'bit' callback data, after admin proved/disaprroved payment
-function handleBitAction(bot, query) {
+function handleCBitAction(bot, query) {
     const chatId = query.message.chat.id;
-    const [_, duration, price] = query.data.split('-');
-    const selection = selectedModels[chatId];
-    selection.bitImage = true;
-
-    const messageText = `בחרת בשיחה של ${duration} דקות במחיר של ${price} שקלים. יש להעביר בביט למספר 0539238949, לשלוח צילום מסך ולאחר מכן ללחוץ על 'שילמתי'.`;
-    const options = {
-        parse_mode: 'HTML',
-        reply_markup: {
-            inline_keyboard: [
-                [{ text: 'שילמתי', callback_data: `pay_confirm-${duration}-${price}` }]
-            ]
-        }
-    };
-    bot.sendMessage(chatId, messageText, options);
+    bot.sendMessage(chatId, 'התשלום אושר והלקוח קיבל התראה.');
+    processFullCallPayment(bot, query)
 }
 
 // Function to handle image upload
@@ -576,16 +560,24 @@ async function handleImageUpload(bot, msg) {
                 bot.sendMessage(chatId, 'התמונה נשמרה בהצלחה. נא להתמין לאישור תשלום.');
                 selection.bitImage = false;
 
-                // Send the image to the specified username
-                /*const targetUsername = "Mj45667";
                 try {
-                    const targetUser = await bot.getChat(`@${targetUsername}`);
-                    await bot.sendPhoto(targetUser.id, filePath, { caption: 'התקבלה תמונה מהמשתמש' });
+                    await bot.sendPhoto('27840013', filePath, { caption: 'תשלום מלקוח' });
                     console.log(`Image sent to ${targetUsername}`);
+
+                    const messageText = `התקבל תשלום בביט האם לאשר?`;
+                    const options = {
+                        parse_mode: 'HTML',
+                        reply_markup: {
+                            inline_keyboard: [
+                                [{ text: 'אישור', callback_data: `bit-${chatId}` }]
+                            ]
+                        }
+                    };
+                    bot.sendMessage('27840013', messageText, options);
                 } catch (error) {
                     console.error(`Error sending image to ${targetUsername}:`, error);
-                    bot.sendMessage(chatId, `שגיאה בשליחת התמונה ל-${targetUsername}.`);
-                }*/
+                    bot.sendMessage(chatId, `שגיאה בשליחת התמונה`);
+                }
             });
         } catch (error) {
             console.error('Error saving photo:', error);
