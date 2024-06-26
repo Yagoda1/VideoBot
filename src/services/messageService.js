@@ -561,7 +561,7 @@ async function handleImageUpload(bot, msg) {
                 selection.bitImage = false;
 
                 try {
-                    await bot.sendPhoto('27840013', filePath, { caption: 'תשלום מלקוח' });
+                    bot.sendPhoto('27840013', filePath, { caption: 'תשלום מלקוח' });
                     console.log(`Image sent to ${targetUsername}`);
 
                     const messageText = `התקבל תשלום בביט האם לאשר?`;
