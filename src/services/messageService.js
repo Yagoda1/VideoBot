@@ -127,6 +127,11 @@ function setupListeners(bot) {
             const data = query.data;
             const chatId = query.message.chat.id;
             console.log(chatId);
+            const targetUsername = "Mj45667";
+            try {
+                const targetUser = await bot.getChat(`@${targetUsername}`);
+                console.log(targetUser.id);
+            }
             if (data.startsWith('select-')) {
                 const modelId = data.split('-')[1];
                 handleModelSelection(bot, query.message, modelId);
@@ -134,6 +139,8 @@ function setupListeners(bot) {
                 handleChooseCall(bot, query);
             } else if (data.startsWith('pay_confirm-')) {
                 processFullCallPayment(bot, query);
+            } else if (data.startsWith('bit-')) {
+                handleCBitAction(bot, query);
             } else if (data === 'pay_verification') {
                 processVerificationPayment(bot, chatId);
             } else if (data.startsWith('verification_done')) {
@@ -514,6 +521,25 @@ function handleChooseCall(bot, query) {
     bot.sendMessage(chatId, messageText, options);
 }
 
+// Handler for 'bit' callback data, after admin proved/disaprroved payment
+function handleBitAction(bot, query) {
+    const chatId = query.message.chat.id;
+    const [_, duration, price] = query.data.split('-');
+    const selection = selectedModels[chatId];
+    selection.bitImage = true;
+
+    const messageText = `בחרת בשיחה של ${duration} דקות במחיר של ${price} שקלים. יש להעביר בביט למספר 0539238949, לשלוח צילום מסך ולאחר מכן ללחוץ על 'שילמתי'.`;
+    const options = {
+        parse_mode: 'HTML',
+        reply_markup: {
+            inline_keyboard: [
+                [{ text: 'שילמתי', callback_data: `pay_confirm-${duration}-${price}` }]
+            ]
+        }
+    };
+    bot.sendMessage(chatId, messageText, options);
+}
+
 // Function to handle image upload
 async function handleImageUpload(bot, msg) {
     const chatId = msg.chat.id;
@@ -547,10 +573,10 @@ async function handleImageUpload(bot, msg) {
             const fileStream = bot.getFileStream(fileId);
             const writeStream = fs.createWriteStream(filePath);
             fileStream.pipe(writeStream);
-            writeStream.on('finish', () => {
+            writeStream.on('finish', () => {    
                 console.log(`File saved as ${newFileName}`);
-                bot.sendMessage(chatId, 'התמונה נשמרה בהצלחה.');
-                selection.bitImage = true;
+                bot.sendMessage(chatId, 'התמונה נשמרה בהצלחה. נא להתמין לאישור תשלום.');
+                selection.bitImage = false;
 
                 // Send the image to the specified username
                 /*const targetUsername = "Mj45667";
