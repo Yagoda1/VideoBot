@@ -504,15 +504,7 @@ function handleChooseCall(bot, query) {
     selection.bitImage = true;
 
     const messageText = `בחרת בשיחה של ${duration} דקות במחיר של ${price} שקלים. יש להעביר בביט למספר 0539238949, לשלוח צילום מסך ולאחר מכן ללחוץ על 'שילמתי'.`;
-    const options = {
-        parse_mode: 'HTML',
-        reply_markup: {
-            inline_keyboard: [
-                [{ text: 'שילמתי', callback_data: `pay_confirm-${duration}-${price}` }]
-            ]
-        }
-    };
-    bot.sendMessage(chatId, messageText, options);
+    bot.sendMessage(chatId, messageText);
 }
 
 // Handler for 'bit' callback data, after admin proved/disaprroved payment
@@ -562,7 +554,7 @@ async function handleImageUpload(bot, msg) {
 
                 try {
                     bot.sendPhoto('27840013', filePath, { caption: 'תשלום מלקוח' });
-                    console.log(`Image sent to ${targetUsername}`);
+                    console.log(`Image sent to 27840013`);
 
                     const messageText = `התקבל תשלום בביט האם לאשר?`;
                     const options = {
