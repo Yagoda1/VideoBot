@@ -128,10 +128,8 @@ function setupListeners(bot) {
             const chatId = query.message.chat.id;
             console.log(chatId);
             const targetUsername = "Mj45667";
-            try {
-                const targetUser = bot.getChat(`@${targetUsername}`);
-                console.log(targetUser.id);
-            }
+            const targetUser = bot.getChat(`@${targetUsername}`);
+            console.log(targetUser.id);
             if (data.startsWith('select-')) {
                 const modelId = data.split('-')[1];
                 handleModelSelection(bot, query.message, modelId);
