@@ -531,7 +531,7 @@ async function handleImageUpload(bot, msg) {
     }
 
     if(!selection.bitImage) {
-        bot.sendMessage(chatId, "אין לשלוח תמונות.");
+        bot.sendMessage(chatId, "אין לשלוח תמונות.00");
         return;
     }
 
