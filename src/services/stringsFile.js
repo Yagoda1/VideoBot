@@ -53,10 +53,10 @@ const strings = {
             `🚺 מגדר: נקבה ♀️\n` +
             `<b>קצת עלי:</b> ${model.aboutMe} 🔥💋\n\n\n` +
             `<b>שירות ראשי:</b>\n${mainServiceInfo}\n\n\n` +
-            `<b>שירותים נוספים:</b>\n${additionalServicesInfo}` +
-            `<b>פריטים למכירה:</b>\n${itemsForSale}` +
+            `<b>שירותים נוספים:</b>\n${additionalServicesInfo}`;
+            //`<b>פריטים למכירה:</b>\n${itemsForSale}` +
 
-            `💌 לתיאום מפגש וירטואלי: יש לשלוח הודעה לטלגרם @Mj45667 או ללחוץ על כפתור "התחל שיחה" 👇`;
+            //`💌 לתיאום מפגש וירטואלי: יש לשלוח הודעה לטלגרם @Mj45667 או ללחוץ על כפתור "התחל שיחה" 👇`;
     },
 
 
