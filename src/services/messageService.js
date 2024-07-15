@@ -10,6 +10,7 @@ function sendInitialMessage(bot, msg) {
     try {
         statisticsService.logUserStartAction(msg); // Log the catalog action
         const chatId = msg.chat.id;
+        console.log(msg.chat.id);
         const messageText = strings.welcomeMessage; // Fetch the welcome message
         const options = getInitialOptions(chatId); // Get buttons based on user verification status
         bot.sendMessage(chatId, messageText, options);
@@ -36,7 +37,7 @@ function getInitialOptions(chatId) {
         return {
             parse_mode: 'HTML',
             reply_markup: { inline_keyboard: baseButtons }
-        };
+        }; 
     } catch (error) {
         console.error("Error in getInitialOptions:", error);
     }
@@ -531,7 +532,7 @@ async function handleImageUpload(bot, msg) {
     }
 
     if(!selection.bitImage) {
-        bot.sendMessage(chatId, "אין לשלוח תמונות.00");
+        bot.sendMessage(chatId, "אין לשלוח תמונות.");
         return;
     }
 
