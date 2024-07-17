@@ -130,5 +130,6 @@ module.exports = {
     updateModel,
     deleteModel,
     readModels, // Exporting for potential external usage,
+    updateModelAvailability,
     findModelImages
 };

@@ -145,7 +145,7 @@ function setupListeners(bot) {
         bot.onText(/\/available/, (msg) => {
             const chatId = msg.chat.id;
             if (modelService.isModel(chatId)) {
-                // Placeholder for handling /available command
+                modelService.updateModelAvailability(chatId, true);
                 console.log(`Chat ID ${chatId} set to available.`);
                 bot.sendMessage(chatId, "You are now marked as available.");
         });
@@ -153,7 +153,7 @@ function setupListeners(bot) {
         bot.onText(/\/busy/, (msg) => {
             const chatId = msg.chat.id;
             if (modelService.isModel(chatId)) {
-                // Placeholder for handling /busy command
+                modelService.updateModelAvailability(chatId, true);
                 console.log(`Chat ID ${chatId} set to busy.`);
                 bot.sendMessage(chatId, "You are now marked as busy.");
         });
