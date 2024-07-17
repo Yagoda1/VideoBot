@@ -15,10 +15,11 @@ function readModels() {
     }
 }
 
-// Check if a given chat_id is a model
 function isModel(chat_id) {
     try {
-        const model = getModelByChatId(chat_id);
+        const models = readModels();
+        // Convert chat_id to string and check against stringified model.chatId
+        const model = models.find(model => String(model.chatId) === String(chat_id));
         if (model) {
             console.log(`Chat ID ${chat_id} is a model.`);
             return true;
@@ -31,6 +32,7 @@ function isModel(chat_id) {
         return false;
     }
 }
+
 
 // Write models to the JSON file
 function writeModels(models) {
