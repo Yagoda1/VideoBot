@@ -296,7 +296,8 @@ function finalizePaymentAndNotify(bot, chatId) {
     const model = modelService.getModelById(selection.modelId);
     // Create a Telegram link to start a chat with the user
     const chatLink = `tg://user?id=${chatId}`;
-    const messageText = `You have received payment from a user.`;
+
+    const messageText = `You have received payment from a user. Call duration: ${selection.callTime} minutes.`;
     const keyboard = {
         inline_keyboard: [[{ text: "Start Call", url: chatLink }]]
     };
@@ -323,7 +324,8 @@ function handleModelSelection(bot, message, modelId) {
             selectedModels[message.chat.id] = {
                 modelId: modelId,
                 username: message.from.username,
-                bitImage: false
+                bitImage: false,
+                callTime: 0
             };
             const opts = {
                 parse_mode: 'HTML',
@@ -438,7 +440,7 @@ function notifyModelForVerification(bot, model, message) {
     try {
         // Create a Telegram link to start a chat with the user
         const userChatLink = `tg://user?id=${message.chat.id}`;
-        const modelMessageText = `You have received payment from a user. Click to start the call.`;
+        const modelMessageText = `You have received payment from a user. Click to start the call. Call duration: 1 minue`;
         const modelKeyboard = {
             inline_keyboard: [[{ text: "Start Call", url: userChatLink }]]
         };
@@ -542,6 +544,7 @@ function handleChooseCall(bot, query) {
     const [_, duration, price] = query.data.split('-');
     const selection = selectedModels[chatId];
     selection.bitImage = true;
+    selection.callTime = duration;
 
     const messageText = `בחרת בשיחה של ${duration} דקות במחיר של ${price} שקלים. יש להעביר בביט למספר 0539238949, לשלוח צילום מסך ולאחר מכן ללחוץ על 'שילמתי'.`;
     bot.sendMessage(chatId, messageText);
