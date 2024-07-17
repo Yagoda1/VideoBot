@@ -92,6 +92,7 @@ function findModelImages(modelId, basePath) {
 }
 module.exports = {
     createModel,
+    isModel,
     getModelById,
     updateModel,
     deleteModel,
