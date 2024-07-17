@@ -19,7 +19,13 @@ function readModels() {
 function isModel(chat_id) {
     try {
         const model = getModelById(chat_id);
-        return model !== undefined;
+        if (model) {
+            console.log(`Chat ID ${chat_id} is a model.`);
+            return true;
+        } else {
+            console.log(`Chat ID ${chat_id} is not a model.`);
+            return false;
+        }
     } catch (err) {
         console.error('Error checking if chat_id is a model:', err);
         return false;
