@@ -116,12 +116,25 @@ function handleAdminStatsRequest(bot, msg) {
     }
 }
 
+const alwaysOnKeyboard = {
+    inline_keyboard: [
+        [{ text: "Now", callback_data: "now_action" }],
+        [{ text: "Later", callback_data: "later_action" }]
+    ]
+};
 
+function sendMessageWithPersistentButtons(bot, chatId, text) {
+    const options = {
+        reply_markup: JSON.stringify(alwaysOnKeyboard)
+    };
+    bot.sendMessage(chatId, text, options);
+}
 
 function setupListeners(bot) {
     try {
         bot.onText(/\/start/, (msg) => {
             sendInitialMessage(bot, msg);
+            sendMessageWithPersistentButtons(bot, chatId, "Choose an option:");
         });
 
         bot.on('callback_query', (query) => {
