@@ -154,7 +154,7 @@ function setupListeners(bot) {
         bot.onText(/\/busy/, (msg) => {
             const chatId = msg.chat.id;
             if (modelService.isModel(chatId)) {
-                modelService.updateModelAvailability(chatId, true);
+                modelService.updateModelAvailability(chatId, false);
                 console.log(`Chat ID ${chatId} set to busy.`);
                 bot.sendMessage(chatId, "You are now marked as busy.");
             }
