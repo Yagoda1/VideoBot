@@ -15,16 +15,15 @@ function readModels() {
     }
 }
 
+// Check if a given chat_id is a model
 function isModel(chat_id) {
     try {
-        const data = fs.readFileSync(filePath, 'utf8');
-        const parseData = JSON.parse(data);
-        return chat_id in parseData;
+        const model = getModelById(chat_id);
+        return model !== undefined;
     } catch (err) {
-        console.error('Error reading models from file:', err);
+        console.error('Error checking if chat_id is a model:', err);
         return false;
     }
-    return false;
 }
 
 // Write models to the JSON file
