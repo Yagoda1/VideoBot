@@ -134,6 +134,7 @@ function setupListeners(bot) {
     try {
         bot.onText(/\/start/, (msg) => {
             sendInitialMessage(bot, msg);
+            const chatId = msg.chat.id;
             sendMessageWithPersistentButtons(bot, chatId, "Choose an option:");
         });
 
