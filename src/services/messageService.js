@@ -135,10 +135,27 @@ function sendMessageWithPersistentButtons(bot, chatId, text) {
 function setupListeners(bot) {
     try {
         bot.onText(/\/start/, (msg) => {
-            sendInitialMessage(bot, msg);
             const chatId = msg.chat.id;
             if(modelService.isModel(chatId))
                 sendMessageWithPersistentButtons(bot, chatId, "Choose an option:");
+            else
+                sendInitialMessage(bot, msg);
+        });
+
+        bot.onText(/\/available/, (msg) => {
+            const chatId = msg.chat.id;
+            if (modelService.isModel(chatId)) {
+                // Placeholder for handling /available command
+                console.log(`Chat ID ${chatId} set to available.`);
+                bot.sendMessage(chatId, "You are now marked as available.");
+        });
+
+        bot.onText(/\/busy/, (msg) => {
+            const chatId = msg.chat.id;
+            if (modelService.isModel(chatId)) {
+                // Placeholder for handling /busy command
+                console.log(`Chat ID ${chatId} set to busy.`);
+                bot.sendMessage(chatId, "You are now marked as busy.");
         });
 
         bot.on('callback_query', (query) => {

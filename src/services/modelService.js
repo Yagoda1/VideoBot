@@ -86,6 +86,25 @@ function deleteModel(id) {
     return false;
 }
 
+// Update the isAvailable field for a model by chatid
+function updateModelAvailability(chat_id, isAvailable) {
+    try {
+        let models = readModels();
+        const index = models.findIndex(model => String(model.chatId) === String(id));
+        if (index !== -1) {
+            models[index].isAvailable = isAvailable;
+            writeModels(models);
+            console.log(`Model ID ${id} availability updated to ${isAvailable}.`);
+            return true;
+        } else {
+            console.log(`Model ID ${id} not found.`);
+            return false;
+        }
+    } catch (err) {
+        console.error('Error updating model availability:', err);
+        return false;
+    }
+}
 
 function findModelImages(modelId, basePath) {
 
