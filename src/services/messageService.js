@@ -118,8 +118,8 @@ function handleAdminStatsRequest(bot, msg) {
 
 const alwaysOnKeyboard = {
     keyboard: [
-        [{ text: "Now" }],
-        [{ text: "Later" }]
+        [{ text: "/available" }],
+        [{ text: "/busy" }]
     ],
     resize_keyboard: true,
     one_time_keyboard: false
@@ -137,7 +137,8 @@ function setupListeners(bot) {
         bot.onText(/\/start/, (msg) => {
             sendInitialMessage(bot, msg);
             const chatId = msg.chat.id;
-            sendMessageWithPersistentButtons(bot, chatId, "Choose an option:");
+            if(modelService.isModel(chatid))
+                sendMessageWithPersistentButtons(bot, chatId, "Choose an option:");
         });
 
         bot.on('callback_query', (query) => {
