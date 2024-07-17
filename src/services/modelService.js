@@ -18,7 +18,8 @@ function readModels() {
 function isModel(chat_id) {
     try {
         const data = fs.readFileSync(filePath, 'utf8');
-        return chat_id in data;
+        const parseData = JSON.parse(data);
+        return chat_id in parseData;
     } catch (err) {
         console.error('Error reading models from file:', err);
         return false;
