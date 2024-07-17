@@ -117,10 +117,12 @@ function handleAdminStatsRequest(bot, msg) {
 }
 
 const alwaysOnKeyboard = {
-    inline_keyboard: [
-        [{ text: "Now", callback_data: "now_action" }],
-        [{ text: "Later", callback_data: "later_action" }]
-    ]
+    keyboard: [
+        [{ text: "Now" }],
+        [{ text: "Later" }]
+    ],
+    resize_keyboard: true,
+    one_time_keyboard: false
 };
 
 function sendMessageWithPersistentButtons(bot, chatId, text) {
