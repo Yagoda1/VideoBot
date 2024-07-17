@@ -18,7 +18,7 @@ function readModels() {
 // Check if a given chat_id is a model
 function isModel(chat_id) {
     try {
-        const model = getModelById(chat_id);
+        const model = getModelByChatId(chat_id);
         if (model) {
             console.log(`Chat ID ${chat_id} is a model.`);
             return true;
@@ -53,6 +53,12 @@ function createModel(newModel) {
 function getModelById(id) {
     const models = readModels();
     return models.find(model => model.id == id);
+}
+
+// Get a model by chat_id
+function getModelByChatId(chat_id) {
+    const models = readModels();
+    return models.find(model => model.chatId == chat_id);
 }
 
 // Update a model by ID
