@@ -353,6 +353,8 @@ async function handleCatalogSelection(bot, query) {
         const message = query.message;
         // Iterate over each model asynchronously
         for (const model of models) {
+            if(!model.isAvailable)
+                continue;
             // Fetch the paths for all relevant images for the model
             const imageBasePath = 'data/images/';
             const imagePaths = modelService.findModelImages(model.id, imageBasePath);
