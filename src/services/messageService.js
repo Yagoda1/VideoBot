@@ -148,6 +148,7 @@ function setupListeners(bot) {
                 modelService.updateModelAvailability(chatId, true);
                 console.log(`Chat ID ${chatId} set to available.`);
                 bot.sendMessage(chatId, "You are now marked as available.");
+            }
         });
 
         bot.onText(/\/busy/, (msg) => {
@@ -156,6 +157,7 @@ function setupListeners(bot) {
                 modelService.updateModelAvailability(chatId, true);
                 console.log(`Chat ID ${chatId} set to busy.`);
                 bot.sendMessage(chatId, "You are now marked as busy.");
+            }
         });
 
         bot.on('callback_query', (query) => {
