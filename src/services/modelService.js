@@ -94,10 +94,10 @@ function updateModelAvailability(chat_id, isAvailable) {
         if (index !== -1) {
             models[index].isAvailable = isAvailable;
             writeModels(models);
-            console.log(`Model ID ${id} availability updated to ${isAvailable}.`);
+            console.log(`Model (chat) ID ${chat_id} availability updated to ${isAvailable}.`);
             return true;
         } else {
-            console.log(`Model ID ${id} not found.`);
+            console.log(`Model (chat) ID ${chat_id} not found.`);
             return false;
         }
     } catch (err) {
