@@ -90,7 +90,7 @@ function deleteModel(id) {
 function updateModelAvailability(chat_id, isAvailable) {
     try {
         let models = readModels();
-        const index = models.findIndex(model => String(model.chatId) === String(id));
+        const index = models.findIndex(model => String(model.chatId) === String(chat_id));
         if (index !== -1) {
             models[index].isAvailable = isAvailable;
             writeModels(models);
