@@ -421,7 +421,7 @@ function checkVerificationCode(bot, chatId, inputCode) {
 function handleVerificationPayment(bot, chatId) {
     try {
         const price = 10; // Verification price in shekels
-        const messageText = `שיחת האימות תעלה ${price} שקלים. אנא אשר את התשלום. היום לרגל ההשקה שיחת האימות בחינם יש ללחו שילמתי להמשיך`;
+        const messageText = `שיחת האימות תעלה ${price} שקלים. אנא אשר את התשלום. היום לרגל ההשקה שיחת האימות בחינם יש ללחוץ שילמתי להמשיך.`;
         const options = {
             parse_mode: 'HTML',
             reply_markup: {
