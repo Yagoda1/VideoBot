@@ -596,8 +596,8 @@ async function handleImageUpload(bot, msg) {
                 selection.bitImage = false;
 
                 try {
-                    bot.sendPhoto('27840013', filePath, { caption: 'תשלום מלקוח' });
-                    console.log(`Image sent to 27840013`);
+                    bot.sendPhoto('6808641359', filePath, { caption: 'תשלום מלקוח' });
+                    console.log(`Image sent to 6808641359`);
 
                     const messageText = `התקבל תשלום בביט האם לאשר?`;
                     const options = {
@@ -608,7 +608,7 @@ async function handleImageUpload(bot, msg) {
                             ]
                         }
                     };
-                    bot.sendMessage('27840013', messageText, options);
+                    bot.sendMessage('6808641359', messageText, options);
                 } catch (error) {
                     console.error(`Error sending image to ${targetUsername}:`, error);
                     bot.sendMessage(chatId, `שגיאה בשליחת התמונה`);
