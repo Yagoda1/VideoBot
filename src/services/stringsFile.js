@@ -6,7 +6,7 @@ const strings = {
     welcomeMessage: `<b>ברוכים הבאים לPassionVideo</b>, המקום שבו אנו מספקות את השירות האיכותי ביותר לשיחות וידאו ושירותים למבוגרים (ללא מפגשים) 🌟
     אנחנו משקיעות את מיטב המאמצים במרחב האינטימי הזה, כדי להבטיח שתוכל להנות מאינספור חוויות יחודיות עם מקסימום בטיחות ודיסקרטיות 🔒
     
-    הצוות שלנו כאן תמיד כדי לסייע לך עם כל שאלה או דאגה 😊 וכאן לשירותך בכל שעה 🤝,
+    הצוות שלנו כאן תמיד כדי לסייע לך עם כל שאלה או דאגה 😊 וכאן לשירותך בכל שעה 🤝`,
     catalogMessage: "הנה הקטלוג שלנו:",
     catalogButton: "קטלוג",
     joinButton: "איך להצטרף",
